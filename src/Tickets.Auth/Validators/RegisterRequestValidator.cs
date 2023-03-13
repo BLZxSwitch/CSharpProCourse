@@ -11,7 +11,7 @@ internal sealed class RegisterRequestValidator : AbstractValidator<RegisterReque
 {
   public RegisterRequestValidator()
   {
-    RuleFor(request => request.Password).NotEmpty();
+    RuleFor(request => request.Password).NotEmpty().MinimumLength(6);
     RuleFor(request => request.Email).EmailAddress();
   }
 }
