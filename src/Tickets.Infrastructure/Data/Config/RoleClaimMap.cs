@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Tickets.Infrastructure.Data.Config;
 
-public class RoleClimeMap : IEntityTypeConfiguration<IdentityRoleClaim<Guid>>
+public class RoleClimeConfiguration : IEntityTypeConfiguration<IdentityRoleClaim<Guid>>
 {
     public void Configure(EntityTypeBuilder<IdentityRoleClaim<Guid>> builder)
     {

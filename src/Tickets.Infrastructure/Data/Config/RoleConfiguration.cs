@@ -4,7 +4,7 @@ using Tickets.Core.UserAggregate;
 
 namespace Tickets.Infrastructure.Data.Config;
 
-public class RoleMap : IEntityTypeConfiguration<Role>
+public class RoleConfiguration : IEntityTypeConfiguration<Role>
 {
     public void Configure(EntityTypeBuilder<Role> builder)
     {
