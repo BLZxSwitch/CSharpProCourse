@@ -6,17 +6,27 @@ using Microsoft.OpenApi.Models;
 
 namespace Tickets.Core.Configurations;
 
+/// <summary>
+/// Swagger configuration
+/// </summary>
 public static class SwaggerConfig
 {
+  /// <summary>
+  /// Register swagger middlewares
+  /// </summary>
+  /// <param name="app">Application</param>
+  /// <param name="name">The description that appears in the document selector drop-down</param>
   public static void UseAppSwagger(this WebApplication app, string name)
   {
-    // Enable middleware to serve generated Swagger as a JSON endpoint.
     app.UseSwagger();
-
-    // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), specifying the Swagger JSON endpoint.
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", name));
   }
 
+  /// <summary>
+  /// Configure swagger
+  /// </summary>
+  /// <param name="services">ServiceCollection</param>
+  /// <param name="title">Swagger UI title</param>
   public static void ConfigureSwagger(this IServiceCollection services, string title)
   {
     services.AddSwaggerGen(c =>

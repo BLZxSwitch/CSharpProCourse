@@ -10,5 +10,5 @@ public interface IUserService
   Task<User?> FindByNameAsync(string userName);
   Task<string?> GetAuthTokenOnUserLogin(AuthRequest request);
   Task<RegisterResponse> RegisterUser(RegisterRequest request);
-  Task AddAdminRole(User user, Roles roles);
+  Task AddAdminRole(User user);
 }

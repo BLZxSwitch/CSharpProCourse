@@ -4,7 +4,10 @@ using Tickets.Auth.DTO;
 
 namespace Tickets.Auth.Validators;
 
-internal class RegisterRequestValidator : AbstractValidator<RegisterRequest>
+/// <summary>
+/// Validator for RegisterRequest
+/// </summary>
+internal sealed class RegisterRequestValidator : AbstractValidator<RegisterRequest>
 {
   public RegisterRequestValidator()
   {

@@ -1,4 +1,5 @@
-﻿using Tickets.Core.ContributorAggregate;
+﻿using Microsoft.AspNetCore.Identity;
+using Tickets.Core.ContributorAggregate;
 using Tickets.Core.ProjectAggregate;
 using Tickets.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
@@ -31,11 +32,7 @@ public static class SeedData
 
   public static void Initialize(IServiceProvider serviceProvider)
   {
-    using var dbContext = new AppDbContext(serviceProvider.GetRequiredService<DbContextOptions<AppDbContext>>(), null);
-    if (!dbContext.Roles.Any())
-    {
-      PopulateUserRoles(dbContext);
-    }
+    PopulateUserRoles(serviceProvider);
 
     // TODO Оставлено для примера использования, удалить после того как бы хорошо станем ориентироваться в проекте
     // using (var dbContext = new AppDbContext(
@@ -53,14 +50,13 @@ public static class SeedData
     // }
   }
 
-  public static void PopulateUserRoles(AppDbContext dbContext)
+  private static async void PopulateUserRoles(IServiceProvider serviceProvider)
   {
+    using var scope = serviceProvider.CreateScope();
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<Role>>();
     foreach (string name in Enum.GetNames(typeof(Roles)))
-    {
-      dbContext.Roles.Add(new Role { Id = Guid.NewGuid(), Name = name, NormalizedName = name.ToUpper()});
-    }
-
-    dbContext.SaveChanges();
+      if (!await roleManager.RoleExistsAsync(name))
+        await roleManager.CreateAsync(new Role { Name = name });
   }
 
   public static void PopulateTestData(AppDbContext dbContext)

@@ -8,8 +8,15 @@ using Tickets.Core.Options;
 
 namespace Tickets.Core.Configurations;
 
+/// <summary>
+/// Authentication and JwtBearer configuration
+/// </summary>
 public static class JwtConfig
 {
+  /// <summary>
+  /// Adds Authentication and JwtBearer configuration
+  /// </summary>
+  /// <param name="builder">App builder</param>
   public static void ConfigureBearerAuth(this WebApplicationBuilder builder)
   {
     var authTokenSettingsSection = builder.Configuration.GetSection(nameof(AuthTokenOptions));

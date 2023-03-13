@@ -8,6 +8,10 @@ using Tickets.Core.Options;
 using Tickets.Core.UserAggregate;
 
 namespace Tickets.Auth.Services;
+
+/// <summary>
+/// Jwt token service
+/// </summary>
 internal sealed class TokenService : ITokenService
 {
   private readonly JwtSecurityTokenHandler _jwtSecurityTokenHandler;
@@ -18,13 +22,16 @@ internal sealed class TokenService : ITokenService
     _jwtSecurityTokenHandler = jwtSecurityTokenHandler;
     _options = options.Value;
   }
+
+  /// <summary>
+  /// Generates Jwt token for user
+  /// </summary>
+  /// <param name="user">User</param>
+  /// <returns></returns>
   public string GetAuthToken(User user)
   {
-    var claims = new List<Claim>
-    {
-      new(ClaimTypes.NameIdentifier, user.Id.ToString()),
-    };
-    
+    var claims = new List<Claim> { new(ClaimTypes.NameIdentifier, user.Id.ToString()) };
+
     claims.AddRange(user.Roles.Select(role => new Claim(ClaimTypes.Role, role.Role.Name!)));
 
     var secretKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_options.SecretKey));

@@ -1,6 +1,8 @@
 ﻿using Autofac;
+using Microsoft.AspNetCore.Identity;
 using Tickets.Core.Interfaces;
 using Tickets.Core.Services;
+using Tickets.Core.UserAggregate;
 
 namespace Tickets.Core;
 

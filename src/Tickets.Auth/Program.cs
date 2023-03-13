@@ -11,6 +11,8 @@ using Tickets.Core.UserAggregate;
 using Tickets.Infrastructure;
 using Tickets.Infrastructure.Data;
 
+const string title = "Tickets Auth API V1";
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
@@ -30,48 +32,43 @@ builder.Services.AddIdentity<User, Role>(cfg =>
   .AddEntityFrameworkStores<AppDbContext>()
   .AddUserManager<UserManager<User>>()
   .AddRoleManager<RoleManager<Role>>();
-// .AddSignInManager<SignInManager<User>>();
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+//Добавляем автовалидацию входных моделей для всех запросов, смотри примеры в папке Validators 
 builder.Services.AddFluentValidationAutoValidation();
 
 string? connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-// builder.Services.AddDbContext(connectionString!);
 builder.Services.AddDbContext<AppDbContext>(options =>
   options.UseNpgsql(connectionString)
     .UseSnakeCaseNamingConvention()
     .UseLazyLoadingProxies());
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.ConfigureSwagger("Tickets Auth Web API V1");
+builder.Services.ConfigureSwagger(title);
 
+//Регистрируем все валидаторы которые находятся той же сборке что и AuthRequestValidator
 builder.Services.AddValidatorsFromAssemblyContaining<AuthRequestValidator>(includeInternalTypes: true);
 builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
 {
-  // containerBuilder.RegisterModule(new DefaultCoreModule());
+  //Регистрация всех зависимостей нашего сервис
   containerBuilder.RegisterModule(new DefaultAuthModule());
+  //Регистрация всез зависимостей модуля инфраструктуры
   containerBuilder.RegisterModule(
     new DefaultInfrastructureModule(builder.Environment.EnvironmentName == "Development"));
 });
 
-// if (authTokenSettings != null)
-// {
+//Обшая конфигурация авторизации через Bearer Token
 builder.ConfigureBearerAuth();
-// }
-
-// builder.Services.AddScoped<ITokenService, TokenService>();
-// builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+//Общая регистрация сваггера
 if (app.Environment.IsDevelopment())
 {
-  app.UseSwagger();
-  app.UseSwaggerUI();
+  app.UseAppSwagger(title);
 }
 
 app.UseHttpsRedirection();

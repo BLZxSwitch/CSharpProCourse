@@ -5,7 +5,7 @@ using Tickets.Auth.Services;
 
 namespace Tickets.Auth;
 
-public class DefaultAuthModule : Module
+public sealed class DefaultAuthModule : Module
 {
   protected override void Load(ContainerBuilder builder)
   {

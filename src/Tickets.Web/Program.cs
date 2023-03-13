@@ -3,10 +3,12 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using FastEndpoints;
 using FastEndpoints.ApiExplorer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Tickets.Core;
 using Tickets.Core.Configurations;
+using Tickets.Core.UserAggregate;
 using Tickets.Infrastructure;
 using Tickets.Infrastructure.Data;
 using Tickets.Web;
@@ -16,6 +18,11 @@ const string appTitle = "Tickets Web API V1";
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+
+//Добавляем RoleManager для сидинга ролей, в будущем это можно удалить вместе с сидингом ролей
+builder.Services.AddIdentity<User, Role>()
+  .AddEntityFrameworkStores<AppDbContext>()
+  .AddRoleManager<RoleManager<Role>>();
 
 builder.Host.UseSerilog((_, config) => config.ReadFrom.Configuration(builder.Configuration));
 
@@ -32,7 +39,11 @@ builder.Services.AddDbContext(connectionString!);
 builder.Services.AddControllers();
 builder.Services.AddFastEndpoints();
 builder.Services.AddFastEndpointsApiExplorer();
+
+//Общая конфигурация сваггера
 builder.Services.ConfigureSwagger(appTitle);
+
+//Обшая конфигурация авторизации через Bearer Token
 builder.ConfigureBearerAuth();
 
 // add list services for diagnostic purposes - see https://github.com/ardalis/AspNetCoreStartupServices
@@ -48,7 +59,8 @@ builder.Services.Configure<ServiceConfig>(config =>
 builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
 {
   containerBuilder.RegisterModule(new DefaultCoreModule());
-  containerBuilder.RegisterModule(new DefaultInfrastructureModule(builder.Environment.EnvironmentName == "Development"));
+  containerBuilder.RegisterModule(
+    new DefaultInfrastructureModule(builder.Environment.EnvironmentName == "Development"));
 });
 
 //builder.Logging.AddAzureWebAppDiagnostics(); add this if deploying to Azure
@@ -64,6 +76,7 @@ else
 {
   app.UseHsts();
 }
+
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
@@ -71,7 +84,11 @@ app.UseFastEndpoints();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-app.UseAppSwagger(appTitle);
+//Общая регистрация сваггера
+if (app.Environment.IsDevelopment())
+{
+  app.UseAppSwagger(appTitle);
+}
 
 app.MapControllers();
 
