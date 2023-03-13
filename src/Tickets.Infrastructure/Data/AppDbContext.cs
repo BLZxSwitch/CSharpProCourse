@@ -20,12 +20,13 @@ public class AppDbContext : IdentityDbContext<User, Role, Guid,
   {
     _dispatcher = dispatcher;
   }
-  // TODO Оставлено для примера использования, удалить после того как бы хорошо станем ориентироваться в проекте
+
   public override DbSet<User> Users { get; set; } = default!;
   public override DbSet<IdentityRoleClaim<Guid>> RoleClaims { get; set; } = default!;
   public override DbSet<UserRole> UserRoles { get; set; } = default!;
   public override DbSet<Role> Roles { get; set; } = default!;
   public override DbSet<IdentityUserClaim<Guid>> UserClaims { get; set; } = default!;
+  // TODO Оставлено для примера использования, удалить после того как бы хорошо станем ориентироваться в проекте
   // public DbSet<ToDoItem> ToDoItems => Set<ToDoItem>();
   // public DbSet<Project> Projects => Set<Project>();
   // public DbSet<Contributor> Contributors => Set<Contributor>(); 

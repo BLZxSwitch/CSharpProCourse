@@ -11,6 +11,6 @@ internal sealed class AuthRequestValidator : AbstractValidator<AuthRequest>
   public AuthRequestValidator()
   {
     RuleFor(request => request.Login).NotEmpty();
-    RuleFor(request => request.Password).NotEmpty();
+    RuleFor(request => request.Password).NotEmpty().MinimumLength(6);
   }
 }
