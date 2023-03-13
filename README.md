@@ -22,6 +22,9 @@ C# Professional course team project
 Так как Postgre и pgAdmin находятся в обной сети, то для поключения к БД из pgAdmin адрес сервера нужно указать postgres
 
 Команда для создания миграций
-dotnet ef migrations add НАЗВАНИЕ_МИГРАЦИИ --project Clean.Architecture.Infrastructure --startup-project Clean.Architecture.Web --context AppDbContext
+dotnet ef migrations add НАЗВАНИЕ_МИГРАЦИИ --project Tickets.Infrastructure --startup-project Tickets.Web --context AppDbContext
+
+Команда для удаления миграции
+dotnet ef migrations remove НАЗВАНИЕ_МИГРАЦИИ --project Tickets.Infrastructure --startup-project Tickets.Web --context AppDbContext
 
 При старте проекта автоматически накатваются миграции
