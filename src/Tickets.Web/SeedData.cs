@@ -57,7 +57,7 @@ public static class SeedData
   {
     foreach (string name in Enum.GetNames(typeof(Roles)))
     {
-      dbContext.Roles.Add(new Role { Id = Guid.NewGuid(), Name = name });
+      dbContext.Roles.Add(new Role { Id = Guid.NewGuid(), Name = name, NormalizedName = name.ToUpper()});
     }
 
     dbContext.SaveChanges();
