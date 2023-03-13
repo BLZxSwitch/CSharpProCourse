@@ -39,7 +39,7 @@ public class AuthController : ControllerBase
   }
 
   [HttpGet]
-  [Authorize(Roles = "Administrator")]
+  [Authorize(Roles = nameof(Roles.Administrator))]
   [Route("AdministratorTestAuth")]
   //TODO Добавлено просто для тестирования и информации, удалить в будущем
   public ActionResult AdministratorTestAuth()
